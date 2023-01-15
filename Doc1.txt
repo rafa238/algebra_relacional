@@ -1,0 +1,5 @@
+Id*Nombre*Apellido*Edad*
+1/Jose/Ramirez/16/
+2/Diego/Sanchez/19/
+3/Ramon/Lopez/22/
+4/Andres/Zepeda/26/

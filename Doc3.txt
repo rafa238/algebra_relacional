@@ -1,0 +1,5 @@
+Id*Nombre*Apellido*Ocupacion*Edad*
+1/Romula/Diaz/Obrero/34/
+2/Jose/Guzman/Doctor/43/
+3/Ricardo/Martinez/Arquitecto/22/
+4/Luis/Hernandez/Estudiante/16/
