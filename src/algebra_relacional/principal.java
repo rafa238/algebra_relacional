@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.table.DefaultTableModel;
 
 public class principal extends javax.swing.JFrame {
@@ -310,20 +312,46 @@ public class principal extends javax.swing.JFrame {
             BufferedReader br = new BufferedReader(fr);
             Object [] propiedades = br.lines().toArray();
             String[] lista = propiedades[0].toString().split("\\*");//0,1,2,...,n-1
-            int opcion=JOptionPane.showOptionDialog(null, "Elige que atributo deseas proyectar", "Atributos",
-	                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
-	                null, lista, lista[0]);
-            String[] seleccion = {lista[opcion]};
+            
+            final JPanel panel = new JPanel();
+            ArrayList<JRadioButton> arr = new ArrayList<>();
+            for (String current : lista) {
+                JRadioButton rbtn = new JRadioButton();
+                rbtn.setText(current);
+                rbtn.setBounds(10,50,150,30);
+                arr.add(rbtn);
+                panel.add(rbtn);
+            }
+            JOptionPane.showMessageDialog(null, panel);
+            ArrayList<Integer> columnas = new ArrayList<>();
+            for(JRadioButton btn:arr){
+                if(btn.isSelected()){
+                    System.out.println(btn.getText());
+                    for(int i=0; i<lista.length; i++){
+                        if(lista[i].equals( btn.getText())){
+                            columnas.add(i);
+                            System.out.println(i + " ");
+                        }
+                    }
+                }
+            }
+            
             DefaultTableModel tm = new DefaultTableModel();
-            tm.setColumnIdentifiers(seleccion);
-            for(int i=0;i<propiedades.length-1;i++){
-                String[] datos = propiedades[i+1].toString().split("/");
-                String[] entrar = {datos[opcion]};
-                tm.addRow(entrar);
+            ArrayList<String> identificadores = new ArrayList<>();
+            columnas.forEach(columna -> {
+                identificadores.add(lista[columna]);
+            });
+            tm.setColumnIdentifiers(identificadores.toArray());
+            for(int i=1; i < propiedades.length; i++){
+                String[] datos = propiedades[i].toString().split("/");
+                ArrayList<String> filtrado = new ArrayList<>();
+                columnas.forEach(columna -> {
+                    filtrado.add(datos[columna]);
+                });
+                
+                tm.addRow(filtrado.toArray());
             }
             jtableprincipal.setModel(tm);
-            //guardamos los resultados
-            guardar_datos(FilePathSearch,lista[opcion],1);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(principal.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Los documentos no exsiten o fueron removidos", "ERROR", JOptionPane.ERROR_MESSAGE);
